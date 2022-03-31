@@ -12,11 +12,13 @@ import { Nopagefound404Component } from './nopagefound404/nopagefound404.compone
 
 
 
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
     Nopagefound404Component,
-
 
 
   ],
