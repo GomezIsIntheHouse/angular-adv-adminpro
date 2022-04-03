@@ -17,7 +17,7 @@ export class SidebarComponent implements OnInit {
     this.menuItems=sidebarService.menu;
     //recorro los items del menu, precargados en sidebar.services.ts
 
-    console.log(this.menuItems);
+    // console.log(this.menuItems);
 
   }
 

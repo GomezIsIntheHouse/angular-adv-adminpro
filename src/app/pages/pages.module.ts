@@ -14,6 +14,8 @@ import { Grafica1Component } from './grafica1/grafica1.component';
 import { PagesComponent } from './pages.component';
 import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { PromesasComponent } from './promesas/promesas.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 
 
@@ -29,7 +31,9 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
     ProgressComponent,
     Grafica1Component,
     PagesComponent,
-    AccountSettingsComponent, //en caso de usar dichos modulos fuera del modulo de pages, habria que exportarlos.
+    AccountSettingsComponent,
+    PromesasComponent,
+    RxjsComponent, //en caso de usar dichos modulos fuera del modulo de pages, habria que exportarlos.
   ],
   //por lo anotando anteriormente, se declaran los exports.
   //Al exportar el modulo lo que digo es: estos 4 modulos al ser importados, estarian en sus respectivos lugares

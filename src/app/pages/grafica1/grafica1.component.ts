@@ -19,9 +19,11 @@ export class Grafica1Component {
   public labels4:string[]=['Soda', 'Yerba', 'Aceite','Choclo' ];
 
 
-  public data1:number[]=  [ 35, 45, 10];
-  public data2:number[] = [ 99, 85, 42 ];
-  public data3:number[] = [ 33, 710, 78 ];
-  public data4:number[] = [ 55, 66, 22  ];
+  public data1:number[]=  [ 35, 45, 10, 59];
+  public data2:number[] = [ 99, 85, 42, 59 ];
+  public data3:number[] = [ 33, 710, 78, 59 ];
+  public data4:number[] = [ 55, 66, 22, 59  ];
+
+
 
 }
