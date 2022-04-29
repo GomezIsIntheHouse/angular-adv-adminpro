@@ -1,5 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from '../guards/auth.guard';
 
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path:'dashboard',
     component:PagesComponent,
     //rutas hijas del componente de PagesComponent
+    canActivate:[AuthGuard],  //con este canActivate, podemos validar que una persona registrada y autorizada puede acceder a mi sitio web
   children:[
     {path: '', component: DashboardComponent, data: {title:'Dashboard'}},
     {path: 'progress', component: ProgressComponent, data: {title:'ProgressBar'}},
