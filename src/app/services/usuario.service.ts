@@ -42,7 +42,7 @@ declare const gapi:any;
 export class UsuarioService {
 //propiedades de clase
   public auth2:any;
-
+  public usuario!:Usuario;
 
   constructor(private http:HttpClient, private router:Router, private ngZone:NgZone) {
     this.googleInit();
@@ -97,6 +97,12 @@ export class UsuarioService {
         }
       }).pipe(
         tap((resp:any)=>{
+
+          const { email, img, google, nombre,role, uid } = resp.usuario;
+          this.usuario = new Usuario(nombre, email, '' , img, google, role, uid)
+
+          // this.usuario.imprimirUsuario();
+
           localStorage.setItem('token', resp.token)
         }),
         map((resp)=>true),
