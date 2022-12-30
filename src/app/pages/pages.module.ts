@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { RouterModule } from '@angular/router';
 import {FormsModule} from '@angular/forms';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { SharedModule } from '../shared/shared.module';
@@ -18,6 +18,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 
 
@@ -35,7 +36,8 @@ import { RxjsComponent } from './rxjs/rxjs.component';
     PagesComponent,
     AccountSettingsComponent,
     PromesasComponent,
-    RxjsComponent, //en caso de usar dichos modulos fuera del modulo de pages, habria que exportarlos.
+    RxjsComponent,
+    PerfilComponent, //en caso de usar dichos modulos fuera del modulo de pages, habria que exportarlos.
   ],
   //por lo anotando anteriormente, se declaran los exports.
   //Al exportar el modulo lo que digo es: estos 4 modulos al ser importados, estarian en sus respectivos lugares
@@ -46,14 +48,15 @@ import { RxjsComponent } from './rxjs/rxjs.component';
     ProgressComponent,
     Grafica1Component,
     PagesComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+
   ],
   imports: [
     CommonModule,
     SharedModule,
-    //el modulo del Shared, lo importo en el modulo de PAGES, ya que en el modulo de AUTH no se utiliza para nada
+    //el modulo del Shared, lo importo en el modulo de PAGES, ya que en el modulo de AUTH (por ej) no se utiliza para nada
     //y seria totalmente innecesario hacerlo.
-
+    ReactiveFormsModule,
     RouterModule,
     FormsModule,
     ComponentsModule,

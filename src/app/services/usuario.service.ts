@@ -48,7 +48,13 @@ export class UsuarioService {
     this.googleInit();
    }
 
+  get token():string{
+    return localStorage.getItem('token') || '';
+  }
 
+  get uid(){
+    return this.usuario.uid || '';
+  }
 
   googleInit(){
 
@@ -88,24 +94,24 @@ export class UsuarioService {
 
     validarToken():Observable<boolean>{
 
-      const token = localStorage.getItem('token') || '';
+
       //La siguiente instruccion me indica que la peticion, llevaria en su cabecera 'headers'
       //los items que le indico, no importa la cantidad. En este caso, solo bastaria con mandar el token.
       return this.http.get(`${base_url}/login/renew`,{
         headers:{
-          'x-token':token
+          'x-token': this.token
         }
       }).pipe(
-        tap((resp:any)=>{
-
-          const { email, img, google, nombre,role, uid } = resp.usuario;
+        map((resp:any)=>{
+          const { email, img = '', google, nombre,role, uid } = resp.usuario;
           this.usuario = new Usuario(nombre, email, '' , img, google, role, uid)
 
           // this.usuario.imprimirUsuario();
 
-          localStorage.setItem('token', resp.token)
+          localStorage.setItem('token', resp.token);
+          return true;
         }),
-        map((resp)=>true),
+
         catchError(error=> of(false)  //si existe un error, el observable me devolverá un FALSE, para que de esta manera desactive el sistema de rutas importado en el CAN ACTIVATE
         )
       )
@@ -122,7 +128,8 @@ export class UsuarioService {
     console.log('creando usuario');
 
     //envio la data del formulario(formData) por medio de una llamada al httpClient
-    return this.http.post(`${base_url}/usuarios`, formData).pipe(
+    return this.http.post(`${base_url}/usuarios`, formData)
+    .pipe(
       tap((resp:any)=>{
         localStorage.setItem('token', resp.token)
       })
@@ -132,10 +139,16 @@ export class UsuarioService {
     //dentro del registerComponent.TS, que es el modulo que maneja las validaciones de datos del formulario
 
 
+  }
 
-
-
-
+  actualizarPerfil( data: { email:string, nombre:string, role:any} ){
+  data = {
+    ...data,
+    role: this.usuario.role
+  }
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data,{ headers:{
+      'x-token': this.token
+    }});
   }
 
   login(formData:LoginForm){
