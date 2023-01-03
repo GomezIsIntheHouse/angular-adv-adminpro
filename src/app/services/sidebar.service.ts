@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class SidebarService {
 
   menu: any[]=[{
+    //si quisiera hacer un menu de sidebar mas grande, deberia especificarlo sobre este arreglo declarado.
     title:'Dashboard',
     icono:'mdi mdi-gauge',
     submenu:[
@@ -16,9 +17,25 @@ export class SidebarService {
       {titulo:'ProgressBar', url:'progress'},
 
     ],
+
+
+  },
+  {
+    title:'Mantenimientos',
+    icono:'mdi mdi-folder-lock-open',
+    submenu:[
+      {titulo:'Usuarios',url:'usuarios'},
+      {titulo:'Hospitales', url:'hospitales'},
+      {titulo:'Médicos', url:'medicos'},
+
+
+    ],
     //si quisiera hacer un menu de sidebar mas grande, deberia especificarlo sobre este arreglo declarado.
 
-  }];
+  }
+
+
+];
 
 
 

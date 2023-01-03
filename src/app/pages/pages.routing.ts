@@ -11,13 +11,16 @@ import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { PerfilComponent } from './perfil/perfil.component';
 
+//mantenimientos
+import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
+
 
 
 const routes: Routes = [
   {path:'dashboard',
     component:PagesComponent,
     //rutas hijas del componente de PagesComponent
-    canActivate:[AuthGuard],  //con este canActivate, podemos validar que una persona registrada y autorizada puede acceder a mi sitio web
+    canActivate:[AuthGuard],  //con canActivate, podemos validar que una persona registrada y autorizada puede acceder a mi sitio web
   children:[
     {path: '', component: DashboardComponent, data: {title:'Dashboard'}},
     {path: 'progress', component: ProgressComponent, data: {title:'ProgressBar'}},
@@ -26,6 +29,9 @@ const routes: Routes = [
     {path: 'promesas', component: PromesasComponent, data: {title:'Promesas'}},
     {path: 'rxjs', component: RxjsComponent, data: {title:'RXJS'}},
     {path: 'perfil', component: PerfilComponent, data: {title:'Perfil de usuario'}},
+
+    //mantenimientos
+    {path: 'usuarios', component: UsuariosComponent, data: {title:'Usuarios de app'}},
 
 
     //si estoy en alguna ruta con el / vacio, me redirecciona al dashboard

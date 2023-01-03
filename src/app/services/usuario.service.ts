@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 //interfaz creada manualmente
 import { RegisterForm } from '../interfaces/register-form.interface';
-import { tap, map, catchError } from 'rxjs/operators';
+import { tap, map, catchError, delay } from 'rxjs/operators';
 
 import { Usuario } from '../models/usuario.model';
 
@@ -25,6 +25,7 @@ import { environment } from '../../environments/environment.prod';
 import { LoginForm } from '../interfaces/login-form.interfaces';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
 
 // const base_url= 'http://localhost:3000/api';
 
@@ -54,6 +55,13 @@ export class UsuarioService {
 
   get uid(){
     return this.usuario.uid || '';
+  }
+
+  get headers(){
+    return {
+      headers:{
+      'x-token': this.token
+    }}
   }
 
   googleInit(){
@@ -92,30 +100,30 @@ export class UsuarioService {
 
 
 
-    validarToken():Observable<boolean>{
+  validarToken():Observable<boolean>{
 
 
-      //La siguiente instruccion me indica que la peticion, llevaria en su cabecera 'headers'
-      //los items que le indico, no importa la cantidad. En este caso, solo bastaria con mandar el token.
-      return this.http.get(`${base_url}/login/renew`,{
-        headers:{
-          'x-token': this.token
-        }
-      }).pipe(
-        map((resp:any)=>{
-          const { email, img = '', google, nombre,role, uid } = resp.usuario;
-          this.usuario = new Usuario(nombre, email, '' , img, google, role, uid)
+    //La siguiente instruccion me indica que la peticion, llevaria en su cabecera 'headers'
+    //los items que le indico, no importa la cantidad. En este caso, solo bastaria con mandar el token.
+    return this.http.get(`${base_url}/login/renew`,{
+      headers:{
+        'x-token': this.token
+      }
+    }).pipe(
+      map((resp:any)=>{
+        const { email, img = '', google, nombre,role, uid } = resp.usuario;
+        this.usuario = new Usuario(nombre, email, '' , img, google, role, uid)
 
-          // this.usuario.imprimirUsuario();
+        // this.usuario.imprimirUsuario();
 
-          localStorage.setItem('token', resp.token);
-          return true;
-        }),
+        localStorage.setItem('token', resp.token);
+        return true;
+      }),
 
-        catchError(error=> of(false)  //si existe un error, el observable me devolverá un FALSE, para que de esta manera desactive el sistema de rutas importado en el CAN ACTIVATE
-        )
+      catchError(error=> of(false)  //si existe un error, el observable me devolverá un FALSE, para que de esta manera desactive el sistema de rutas importado en el CAN ACTIVATE
       )
-    }
+    )
+  }
   //con esta funcion recibo el formulario proveniente de REGISTER.COMPONENT.HTML y
   //  validado los campos mediante el    REGISTER.COMPONENT.ts.
 
@@ -146,9 +154,8 @@ export class UsuarioService {
     ...data,
     role: this.usuario.role
   }
-    return this.http.put(`${base_url}/usuarios/${this.uid}`, data,{ headers:{
-      'x-token': this.token
-    }});
+
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, this.headers);
   }
 
   login(formData:LoginForm){
@@ -167,11 +174,6 @@ export class UsuarioService {
     //con el return no es necesario el SUBSCRIBE, ya que el subscribe puede realizarse
     //dentro del registerComponent.TS, que es el modulo que maneja las validaciones de datos del formulario
 
-
-
-
-
-
   }
 
   loginGoogle(token:any){
@@ -186,4 +188,37 @@ export class UsuarioService {
     );
 
   }
+
+  cargarUsuarios(desde:number=0){
+    // cargarUsuario me indica las variables que me devuelve el consumo de esta api.
+    const url = `${ base_url }/usuarios?desde=${ desde }`;
+    return this.http.get<CargarUsuario>( url, this.headers )
+            .pipe(
+              delay(1000),
+              map( resp => {
+                const usuarios = resp.usuarios.map(
+                  user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )
+                );
+
+
+                return {
+                  total: resp.total,
+                  usuarios
+                };
+              })
+            )
+  }
+
+  eliminarUsuario(usuario:Usuario){
+    // http://localhost:3000/api/usuarios/624e32af5b21e0efc9760fb5
+    const uid = usuario.uid;
+    const url = `${ base_url }/usuarios/${ uid }`
+    return this.http.delete(url, this.headers)
+  }
+
+  guardarUsuario( usuario:Usuario ){
+
+
+      return this.http.put(`${base_url}/usuarios/${usuario.uid}`, usuario, this.headers);
+    }
 }

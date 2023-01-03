@@ -19,6 +19,8 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
+
 
 
 
@@ -37,7 +39,9 @@ import { PerfilComponent } from './perfil/perfil.component';
     AccountSettingsComponent,
     PromesasComponent,
     RxjsComponent,
-    PerfilComponent, //en caso de usar dichos modulos fuera del modulo de pages, habria que exportarlos.
+    PerfilComponent,
+    UsuariosComponent,
+    //en caso de usar dichos modulos fuera del modulo de pages, habria que exportarlos.
   ],
   //por lo anotando anteriormente, se declaran los exports.
   //Al exportar el modulo lo que digo es: estos 4 modulos al ser importados, estarian en sus respectivos lugares
