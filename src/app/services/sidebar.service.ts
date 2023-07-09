@@ -18,7 +18,17 @@ export class SidebarService {
     ],
     //si quisiera hacer un menu de sidebar mas grande, deberia especificarlo sobre este arreglo declarado.
 
-  }];
+  },
+  {
+    titulo: 'Mantenimientos',
+    icono: 'mdi mdi-folder-lock-open',
+    submenu: [
+      { titulo: 'Usuarios', url: 'usuarios' },
+      { titulo: 'Hospitales', url: 'hospitales' },
+      { titulo: 'Médicos', url: 'medicos' },
+    ]
+  },
+];
 
 
 

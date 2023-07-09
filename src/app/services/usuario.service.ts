@@ -25,6 +25,8 @@ import { environment } from '../../environments/environment.prod';
 import { LoginForm } from '../interfaces/login-form.interfaces';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
+
 
 // const base_url= 'http://localhost:3000/api';
 
@@ -42,12 +44,29 @@ declare const gapi:any;
 export class UsuarioService {
 //propiedades de clase
   public auth2:any;
+  public usuario!:Usuario;
 
-
-  constructor(private http:HttpClient, private router:Router, private ngZone:NgZone) {
+  constructor(private http:HttpClient, 
+              private router:Router, 
+              private ngZone:NgZone) 
+   {
     this.googleInit();
    }
+   get token(): string {
+    return localStorage.getItem('token') || '';
+  }
 
+  get uid():string {
+    return this.usuario.uid || '';
+  }
+
+  get headers() {
+    return {
+      headers: {
+        'x-token': this.token
+      }
+    }
+  }
 
 
   googleInit(){
@@ -67,6 +86,17 @@ export class UsuarioService {
       });
     })
 
+
+  }
+
+  actualizarPerfil( data: { email: string, nombre: string, role: string | undefined } ) {
+
+    data = {
+      ...data,
+      role: this.usuario.role
+    }
+
+    return this.http.put(`${ base_url }/usuarios/${ this.uid }`, data, this.headers );
 
   }
 
@@ -131,6 +161,22 @@ export class UsuarioService {
 
 
   }
+  cargarUsuarios( desde: number = 0 ) {
+
+    const url = `${ base_url }/usuarios?desde=${ desde }`;
+    return this.http.get<CargarUsuario>( url, this.headers )
+            .pipe(
+              map( resp => {
+                const usuarios = resp.usuarios.map( 
+                  user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid )  
+                );
+                return {
+                  total: resp.total,
+                  usuarios
+                };
+              })
+            )
+  }
 
   login(formData:LoginForm){
     //podria crear una interfaz
@@ -167,4 +213,16 @@ export class UsuarioService {
     );
 
   }
+  eliminarUsuario( usuario: Usuario ) {
+    
+    // /usuarios/5eff3c5054f5efec174e9c84
+    const url = `${ base_url }/usuarios/${ usuario.uid }`;
+    return this.http.delete( url, this.headers );
+}
+
+guardarUsuario( usuario: Usuario ) {
+
+  return this.http.put(`${ base_url }/usuarios/${ usuario.uid }`, usuario, this.headers );
+
+}
 }
